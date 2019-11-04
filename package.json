@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon main.js",
-    "build": "npx babel src --out-dir dist",
+    "build": "babel src --out-dir dist",
     "prestart": "npm run build",
     "start": "node dist/app.js"
   },
@@ -15,7 +15,7 @@
   "license": "ISC",
   "dependencies": {
     "art-template": "^4.13.2",
-    "bootstrap": "^4.3.1",
+    "bootstrap": "^3.4.1",
     "echarts": "^4.4.0",
     "express": "^4.17.1",
     "express-art-template": "^1.0.1",

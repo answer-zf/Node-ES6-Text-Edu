@@ -1,13 +1,15 @@
 import express from 'express'
 import path from 'path'
+import config from './config'
 
 const app = express()
 
-app.use('/node_modules/', express.static(path.join('./node_modules/')))
+app.use('/node_modules/', express.static(config.node_modules_path))
 
-app.use('/public/', express.static(path.join(__dirname, './public/')))
+app.use('/public/', express.static(config.public_path))
 
 app.engine('html', require('express-art-template'))
+app.set('views', config.view_path)
 
 app.get('/', (req, res) => {
   res.render('index.html')
