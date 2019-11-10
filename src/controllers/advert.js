@@ -1,6 +1,12 @@
 import express from 'express'
 import Advert from '../models/advert'
 
+export function showAdvert(req, res, next) {
+  res.render('advert_list.html')
+}
+export function showAddAdvert(req, res, next) {
+  res.render('advert_add.html')
+}
 export function addAdvert(req, res, next) {
   const body = req.body
   const advertOne = new Advert({

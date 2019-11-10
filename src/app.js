@@ -17,7 +17,8 @@ app.use('/public/', express.static(config.public_path))
 
 nunjucks.configure(config.view_path, {
   autoescape: true,
-  express: app
+  express: app,
+  noCache: true // 禁用缓存
 })
 
 // 挂载解析表单 POST 请求体中间件
