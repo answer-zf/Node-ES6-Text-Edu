@@ -16,12 +16,12 @@ const Advert = mongoose.model('Advert', advertSchema)
 
 export default Advert
 
-Advert.find()
-  .skip(2)
-  .limit(2)
-  .exec((err, result) => {
-    if (err) {
-      return next(err)
-    }
-    console.log(result)
-  })
+// Advert.find()
+//   .skip(2)
+//   .limit(2)
+//   .exec((err, result) => {
+//     if (err) {
+//       return next(err)
+//     }
+//     console.log(result)
+//   })

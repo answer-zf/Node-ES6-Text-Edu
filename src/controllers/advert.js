@@ -84,8 +84,6 @@ export function removeAdvert(req, res, next) {
     if (err) {
       return next(err)
     }
-    res.json({
-      err_code: 0
-    })
+    res.redirect('/advert')
   })
 }
