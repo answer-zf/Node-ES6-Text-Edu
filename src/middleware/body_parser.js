@@ -1,8 +1,14 @@
 import queryString from 'querystring'
 export default (req, res, next) => {
-  if (!req.headers['content-length']) {
+  if (req.method.toLowerCase() === 'get') {
     return next()
   }
+
+  // 有文件上传的表单提交不处理
+  if (req.headers['content-type'].startsWith('multipart/form-data')) {
+    return next()
+  }
+
   let data = ''
   req.on('data', (chunk) => {
     data += chunk

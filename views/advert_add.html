@@ -9,35 +9,35 @@
 			<li class="active">添加广告</li>
 		</ol>
 		<div class="advert-add">
-			<form action="/advert/add" class="form-horizontal" method="post">
+			<form action="/advert/add" class="form-horizontal" method="post" enctype="multipart/form-data">
 				<div class="form-group">
 					<label for="" class="col-md-3 control-label">标题</label>
 					<div class="col-md-5">
-						<input type="text" class="form-control input-sm" placeholder="填写广告标题" name="title">
+						<input type="text" class="form-control input-sm" required placeholder="填写广告标题" name="title">
 					</div>
 				</div>
 				<div class="form-group">
 					<label for="" class="col-md-3 control-label">图片</label>
 					<div class="col-md-5">
-						<input type="text" class="form-control input-sm" placeholder="填写广告图片" name="image">
+						<input type="file" class="form-control input-sm" required placeholder="填写广告图片" name="image" id="file">
 					</div>
 				</div>
 				<div class="form-group">
 					<label for="" class="col-md-3 control-label">链接</label>
 					<div class="col-md-5">
-						<input type="text" class="form-control input-sm" placeholder="填写广告链接" name="link">
+						<input type="text" class="form-control input-sm" required placeholder="填写广告链接" name="link">
 					</div>
 				</div>
 				<div class="form-group">
 					<label for="" class="col-md-3 control-label">开始时间</label>
 					<div class="col-md-5">
-						<input type="text" class="form-control input-sm" placeholder="填写广告开始时间" name="start_time">
+						<input type="text" class="form-control input-sm" required placeholder="填写广告开始时间" name="start_time">
 					</div>
 				</div>
 				<div class="form-group">
 					<label for="" class="col-md-3 control-label">结束时间</label>
 					<div class="col-md-5">
-						<input type="text" class="form-control input-sm" placeholder="填写广告结束时间" name="end_time">
+						<input type="text" class="form-control input-sm" required placeholder="填写广告结束时间" name="end_time">
 					</div>
 				</div>
 				<div class="form-group">
@@ -57,7 +57,9 @@
 		$.ajax({
 			url: $(this).attr('action'),
 			type: $(this).attr('method'),
-			data: $(this).serialize(),
+			data: new FormData($(this)[0]),
+			processData: false,
+			contentType: false,
 			success: function (data) {
 				if (data.err_code === 0) {
 					window.location.href = '/advert'

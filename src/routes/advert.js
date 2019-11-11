@@ -6,7 +6,6 @@ const router = express.Router()
 router
   .get('/advert', advertController.showAdvert)
   .get('/advert/add', advertController.showAddAdvert)
-  .get('/advert/list', advertController.listAdvert)
   .post('/advert/add', advertController.addAdvert)
   .get('/advert/one/:advertId', advertController.showEditAdvert)
   .post('/advert/edit', advertController.editAdvert)

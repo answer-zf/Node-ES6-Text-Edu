@@ -12,4 +12,16 @@ const advertSchema = mongoose.Schema({
   last_modified: { type: Date, default: Date.now }
 })
 
-export default mongoose.model('Advert', advertSchema)
+const Advert = mongoose.model('Advert', advertSchema)
+
+export default Advert
+
+Advert.find()
+  .skip(2)
+  .limit(2)
+  .exec((err, result) => {
+    if (err) {
+      return next(err)
+    }
+    console.log(result)
+  })

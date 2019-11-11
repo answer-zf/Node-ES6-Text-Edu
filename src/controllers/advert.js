@@ -1,39 +1,45 @@
-import express from 'express'
 import Advert from '../models/advert'
+import config from '../config'
+import formidable from 'formidable'
+import { basename } from 'path'
 
 export function showAdvert(req, res, next) {
-  res.render('advert_list.html')
+  Advert.find((err, adverts) => {
+    if (err) {
+      return next(err)
+    }
+    res.render('advert_list.html', { adverts })
+  })
 }
 export function showAddAdvert(req, res, next) {
   res.render('advert_add.html')
 }
 export function addAdvert(req, res, next) {
-  const body = req.body
-  const advertOne = new Advert({
-    image: body.image,
-    link: body.link,
-    start_time: body.start_time,
-    end_time: body.end_time,
-    title: body.title
-  })
-  advertOne.save((err, result) => {
-    if (err) {
-      return next(err)
-    }
-    res.json({
-      err_code: 0
-    })
-  })
-}
+  const form = formidable.IncomingForm()
 
-export function listAdvert(req, res, next) {
-  Advert.find((err, docs) => {
+  form.uploadDir = config.uploads_path
+  form.keepExtensions = true
+
+  form.parse(req, (err, fields, files) => {
     if (err) {
       return next(err)
     }
-    res.json({
-      err_code: 0,
-      result: docs
+    const body = fields
+    body.image = basename(files.image.path)
+    const advertOne = new Advert({
+      title: body.title,
+      image: body.image,
+      link: body.link,
+      start_time: body.start_time,
+      end_time: body.end_time
+    })
+    advertOne.save((err, result) => {
+      if (err) {
+        return next(err)
+      }
+      res.json({
+        err_code: 0
+      })
     })
   })
 }
