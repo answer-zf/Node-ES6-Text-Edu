@@ -4,12 +4,34 @@ import formidable from 'formidable'
 import { basename } from 'path'
 
 export function showAdvert(req, res, next) {
-  Advert.find((err, adverts) => {
+  const page = Number.parseInt(req.query.page, 10)
+  const pageSize = 5
+
+  Advert.count((err, count) => {
     if (err) {
       return next(err)
     }
-    res.render('advert_list.html', { adverts })
+    console.log(count)
   })
+  Advert.find()
+    .skip((page - 1) * pageSize)
+    .limit(pageSize)
+    .exec((err, adverts) => {
+      if (err) {
+        return next()
+      }
+      Advert.count((err, count) => {
+        if (err) {
+          return next(err)
+        }
+        const totalPage = Math.ceil(count / pageSize)
+        res.render('advert_list.html', {
+          adverts,
+          totalPage,
+          page
+        })
+      })
+    })
 }
 export function showAddAdvert(req, res, next) {
   res.render('advert_add.html')

@@ -25,3 +25,7 @@ export default Advert
 //     }
 //     console.log(result)
 //   })
+// 1      3      3
+// 2      6      3
+// 3      9      3
+// n 3 * (n-1)   3
