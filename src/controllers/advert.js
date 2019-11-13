@@ -11,7 +11,6 @@ export function showAdvert(req, res, next) {
     if (err) {
       return next(err)
     }
-    console.log(count)
   })
   Advert.find()
     .skip((page - 1) * pageSize)
@@ -33,7 +32,7 @@ export function showAdvert(req, res, next) {
       })
     })
 }
-export function showAddAdvert(req, res, next) {
+export function showAddAdvert(req, res) {
   res.render('advert_add.html')
 }
 export function addAdvert(req, res, next) {
@@ -102,7 +101,7 @@ export function editAdvert(req, res, next) {
 }
 
 export function removeAdvert(req, res, next) {
-  Advert.remove({ _id: req.params.advertId }, (err) => {
+  Advert.remove({ _id: req.params.advertId }, err => {
     if (err) {
       return next(err)
     }
