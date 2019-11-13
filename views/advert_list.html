@@ -43,38 +43,46 @@
                     </tr>
                 </thead>
                 <tbody>
-
-                    {% for item in adverts %}
-                    <tr>
-                        <td>000</td>
-                        <td>{{ item.title }}</td>
-                        <td><img src="/public/uploads/{{ item.image }}" alt="" style="width:100px;"></td>
-                        <td>{{ item.link }}</td>
-                        <td>{{ item.start_time }}</td>
-                        <td>{{ item.end_time }}</td>
-                        <td>000</td>
-                        <td>
-                            <a href="javascript:;" class="btn btn-info btn-xs">编辑</a>
-                            <a href="/advert/remove/{{ item._id }}" class="btn btn-danger btn-xs">删除</a>
-                        </td>
-                    </tr>
-                    {% endfor %}
                 </tbody>
             </table>
         </div>
         <!-- 分页 -->
         <ul class="pagination pull-right">
-            <li><a href="/advert?page={{ page - 1 }}">上一页</a></li>
-            {% for i in range(0, totalPage) -%}
-            {% if  i + 1 == page %}
-            <li class="active"><a href="/advert?page={{ i + 1 }}">{{i + 1}}</a></li>
-            {% else %}
-            <li><a href="/advert?page={{ i + 1 }}">{{i + 1}}</a></li>
-            {% endif %}
-            {%- endfor %}
-            <li><a href="/advert?page={{ page + 1 }}">下一页</a></li>
+            <li><a href="/advert">上一页</a></li>
+            <li><a href="/advert">1</a></li>
+            <li><a href="/advert">2</a></li>
+            <li><a href="/advert">3</a></li>
+            <li><a href="/advert">下一页</a></li>
         </ul>
 
     </div>
 </div>
-{% endblock%}
+<script type="text/x-art-template" id="tpl">
+
+    {{ each adverts }}
+        <tr>
+            <td>{{ $index + 1 }}</td>
+            <td>{{ $value.title }}</td>
+            <td><img src="/public/uploads/{{ $value.image }}" alt="" style="width:100px;"></td>
+            <td>{{ $value.link }}</td>
+            <td>{{ $value.start_time }}</td>
+            <td>{{ $value.end_time }}</td>
+            <td>000</td>
+            <td>
+                <a href="javascript:;" class="btn btn-info btn-xs">编辑</a>
+                <a href="/advert/remove/{{ $value._id }}" class="btn btn-danger btn-xs">删除</a>
+            </td>
+        </tr>
+    {{ /each }}
+
+</script>
+{% endblock %}
+
+{% block script %}
+
+<script src="/node_modules/art-template/lib/template-web.js"></script>
+<script>
+
+</script>
+
+{% endblock %}

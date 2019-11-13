@@ -4,65 +4,13 @@ import formidable from 'formidable'
 import { basename } from 'path'
 
 export function showAdvert(req, res, next) {
-  const page = Number.parseInt(req.query.page, 10)
-  const pageSize = 5
-
-  Advert.count((err, count) => {
-    if (err) {
-      return next(err)
-    }
-  })
-  Advert.find()
-    .skip((page - 1) * pageSize)
-    .limit(pageSize)
-    .exec((err, adverts) => {
-      if (err) {
-        return next()
-      }
-      Advert.count((err, count) => {
-        if (err) {
-          return next(err)
-        }
-        const totalPage = Math.ceil(count / pageSize)
-        res.render('advert_list.html', {
-          adverts,
-          totalPage,
-          page
-        })
-      })
-    })
+  res.render('advert_list.html')
 }
 export function showAddAdvert(req, res) {
   res.render('advert_add.html')
 }
 export function addAdvert(req, res, next) {
-  const form = formidable.IncomingForm()
-
-  form.uploadDir = config.uploads_path
-  form.keepExtensions = true
-
-  form.parse(req, (err, fields, files) => {
-    if (err) {
-      return next(err)
-    }
-    const body = fields
-    body.image = basename(files.image.path)
-    const advertOne = new Advert({
-      title: body.title,
-      image: body.image,
-      link: body.link,
-      start_time: body.start_time,
-      end_time: body.end_time
-    })
-    advertOne.save((err, result) => {
-      if (err) {
-        return next(err)
-      }
-      res.json({
-        err_code: 0
-      })
-    })
-  })
+  res.render('advert_list.html')
 }
 
 export function showEditAdvert(req, res, next) {
