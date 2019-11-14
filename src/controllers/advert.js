@@ -2,7 +2,6 @@ import Advert from '../models/advert'
 import config from '../config'
 import formidable from 'formidable'
 import { basename } from 'path'
-import { promises } from 'dns'
 
 export function showAdvert(req, res, next) {
   const page = Number.parseInt(req.query.page, 10)
@@ -10,22 +9,32 @@ export function showAdvert(req, res, next) {
   Advert.find()
     .skip((page - 1) * pageSize)
     .limit(pageSize)
-    .exec((err, adverts) => {
-      if (err) {
-        return next()
-      }
-      Advert.count((err, count) => {
-        if (err) {
-          return next(err)
-        }
-        const totalPage = Math.ceil(count / pageSize)
-        res.render('advert_list.html', {
-          adverts,
-          totalPage,
-          page
-        })
+    .exec()
+    .then(adverts => {
+      return proCount(adverts)
+    })
+    .then(result => {
+      const [adverts, totalPage] = result
+      res.render('advert_list.html', {
+        adverts,
+        totalPage,
+        page
       })
     })
+    .catch(err => {
+      next(err)
+    })
+  function proCount(adverts) {
+    return new Promise((resolve, reject) => {
+      Advert.count((err, count) => {
+        if (err) {
+          reject(err)
+        }
+        const totalPage = Math.ceil(count / pageSize)
+        resolve([adverts, totalPage])
+      })
+    })
+  }
 }
 export function showAddAdvert(req, res) {
   res.render('advert_add.html')
@@ -77,9 +86,8 @@ export function showEditAdvert(req, res, next) {
     if (err) {
       return next(err)
     }
-    res.json({
-      err_code: 0,
-      result: doc
+    res.render('advert_add.html', {
+      edit: doc
     })
   })
 }
@@ -91,7 +99,6 @@ export function editAdvert(req, res, next) {
       return next(err)
     }
     advert.title = body.title
-    advert.image = body.image
     advert.link = body.link
     advert.start_time = body.start_time
     advert.end_time = body.end_time
@@ -105,6 +112,19 @@ export function editAdvert(req, res, next) {
       })
     })
   })
+  // Advert.findById(req.body.id)
+  //   .then(advert => {
+  //     advert.title = body.title
+  //     advert.image = body.image
+  //     advert.link = body.link
+  //     advert.start_time = body.start_time
+  //     advert.end_time = body.end_time
+  //     advert.last_modified = Date.now()
+  //     return advert.save()
+  //   })
+  //   .then(result => {
+  //     res.render('/advert')
+  //   })
 }
 
 export function removeAdvert(req, res, next) {
