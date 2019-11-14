@@ -2,6 +2,7 @@ import Advert from '../models/advert'
 import config from '../config'
 import formidable from 'formidable'
 import { basename } from 'path'
+import { promises } from 'dns'
 
 export function showAdvert(req, res, next) {
   const page = Number.parseInt(req.query.page, 10)
@@ -30,33 +31,45 @@ export function showAddAdvert(req, res) {
   res.render('advert_add.html')
 }
 export function addAdvert(req, res, next) {
-  const form = formidable.IncomingForm()
-
-  form.uploadDir = config.uploads_path
-  form.keepExtensions = true
-
-  form.parse(req, (err, fields, files) => {
-    if (err) {
-      return next(err)
-    }
-    const body = fields
-    body.image = basename(files.image.path)
-    const advertOne = new Advert({
-      title: body.title,
-      image: body.image,
-      link: body.link,
-      start_time: body.start_time,
-      end_time: body.end_time
+  // promise 封装
+  proFormidable(req)
+    .then(result => {
+      const [fields, files] = result
+      const body = fields
+      body.image = basename(files.image.path)
+      const advertOne = new Advert({
+        title: body.title,
+        image: body.image,
+        link: body.link,
+        start_time: body.start_time,
+        end_time: body.end_time
+      })
+      return advertOne.save()
     })
-    advertOne.save((err, result) => {
-      if (err) {
-        return next(err)
-      }
+    .then(result => {
       res.json({
         err_code: 0
       })
     })
-  })
+    .catch(err => {
+      next(err)
+    })
+
+  function proFormidable(req) {
+    return new Promise((resolve, reject) => {
+      const form = formidable.IncomingForm()
+
+      form.uploadDir = config.uploads_path
+      form.keepExtensions = true
+
+      form.parse(req, (err, fields, files) => {
+        if (err) {
+          reject(err)
+        }
+        resolve([fields, files])
+      })
+    })
+  }
 }
 
 export function showEditAdvert(req, res, next) {
