@@ -56,3 +56,32 @@ export function removeAdvert(req, res, next) {
     res.redirect('/advert')
   })
 }
+
+export function countAdvert(req, res, next) {
+  Advert.count((err, count) => {
+    if (err) {
+      return next(err)
+    }
+    res.json({
+      err_code: 0,
+      count
+    })
+  })
+}
+
+export function listAdvert(req, res, next) {
+  const page = Number.parseInt(req.query.page)
+  const pageSize = Number.parseInt(req.query.pageSize)
+  Advert.find()
+    .skip((page - 1) * pageSize)
+    .limit(pageSize)
+    .exec((err, adverts) => {
+      if (err) {
+        return next(err)
+      }
+      res.json({
+        err_code: 0,
+        adverts
+      })
+    })
+}

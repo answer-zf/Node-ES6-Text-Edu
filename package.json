@@ -24,7 +24,8 @@
     "mongodb": "2.2.33",
     "mongoose": "^5.7.10",
     "nprogress": "^0.2.0",
-    "nunjucks": "^3.2.0"
+    "nunjucks": "^3.2.0",
+    "twbs-pagination": "^1.4.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.6.4",
