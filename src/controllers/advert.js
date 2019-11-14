@@ -6,12 +6,6 @@ import { basename } from 'path'
 export function showAdvert(req, res, next) {
   const page = Number.parseInt(req.query.page, 10)
   const pageSize = 5
-
-  Advert.count((err, count) => {
-    if (err) {
-      return next(err)
-    }
-  })
   Advert.find()
     .skip((page - 1) * pageSize)
     .limit(pageSize)

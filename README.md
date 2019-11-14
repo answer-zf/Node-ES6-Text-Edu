@@ -21,3 +21,5 @@ This is the practice on node.js.
 - pagination for Client
 
 ### promise for branch
+
+- use promise （ controllers/advert.js ）
